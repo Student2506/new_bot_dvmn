@@ -31,10 +31,11 @@ logging.basicConfig(
 
 
 def main():
+    logging_bot = telegram.Bot(token=CBOT_BOT_TOKEN)
     bot = telegram.Bot(token=CBOT_BOT_TOKEN)
     logger = logging.getLogger('dvmn_bot')
     logger.setLevel(logging.WARNING)
-    logger.addHandler(TelegramLogsHandler(bot, CBOT_CHAT_ID))
+    logger.addHandler(TelegramLogsHandler(logging_bot, CBOT_CHAT_ID))
     logging.debug('Бот стартовал')
     delay = 10
     timestamp = time.time()
