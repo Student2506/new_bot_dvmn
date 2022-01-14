@@ -12,6 +12,9 @@ CBOT_CHAT_ID = os.environ['CHAT_ID']
 TIMEOUT = 90
 
 
+logger = logging.getLogger('dvmn_bot')
+
+
 class TelegramLogsHandler(logging.Handler):
 
     def __init__(self, tg_bot, chat_id):
@@ -24,18 +27,8 @@ class TelegramLogsHandler(logging.Handler):
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
-)
-
-
 def main():
-    logging_bot = telegram.Bot(token=CBOT_BOT_TOKEN)
     bot = telegram.Bot(token=CBOT_BOT_TOKEN)
-    logger = logging.getLogger('dvmn_bot')
-    logger.setLevel(logging.WARNING)
-    logger.addHandler(TelegramLogsHandler(logging_bot, CBOT_CHAT_ID))
     logging.debug('Бот стартовал')
     delay = 10
     timestamp = time.time()
@@ -82,4 +75,11 @@ def main():
 
 
 if __name__ == '__main__':
+    logging_bot = telegram.Bot(token=CBOT_BOT_TOKEN)
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
+    )
+    logger.setLevel(logging.WARNING)
+    logger.addHandler(TelegramLogsHandler(logging_bot, CBOT_CHAT_ID))
     main()
