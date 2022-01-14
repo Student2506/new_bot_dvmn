@@ -79,9 +79,6 @@ def main():
             time.sleep(delay)
         except requests.ReadTimeout:
             pass
-        except ZeroDivisionError:
-            logger.exception('Zero division')
-            time.sleep(delay)
 
 
 if __name__ == '__main__':
