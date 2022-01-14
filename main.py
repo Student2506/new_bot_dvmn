@@ -44,6 +44,7 @@ def main():
             )
             response.raise_for_status()
             homeworks = response.json()
+            bot.send_message(chat_id=CBOT_CHAT_ID, text=homeworks)
             if 'timeout' in homeworks:
                 timestamp = homeworks.get('timestamp_to_request')
             if 'found' in homeworks:
