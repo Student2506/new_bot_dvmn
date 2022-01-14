@@ -31,14 +31,15 @@ logging.basicConfig(
 
 
 def main():
+    bot = telegram.Bot(token=CBOT_BOT_TOKEN)
     logger = logging.getLogger('dvmn_bot')
     logger.setLevel(logging.WARNING)
-    logger.addHandler(TelegramLogsHandler(CBOT_BOT_TOKEN, CBOT_CHAT_ID))
+    logger.addHandler(TelegramLogsHandler(bot, CBOT_CHAT_ID))
     logging.debug('Бот стартовал')
     delay = 10
     timestamp = time.time()
     headers = {'Authorization': f'Token {CBOT_DVMN_KEY}'}
-    bot = telegram.Bot(token=CBOT_BOT_TOKEN)
+
     while True:
         params = {"timestamp": timestamp}
         try:
