@@ -12,6 +12,18 @@ CBOT_CHAT_ID = os.environ['CHAT_ID']
 TIMEOUT = 90
 
 
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
@@ -19,6 +31,9 @@ logging.basicConfig(
 
 
 def main():
+    logger = logging.getLogger('dvmn_bot')
+    logger.setLevel(logging.WARNING)
+    logger.addHandler(TelegramLogsHandler(CBOT_BOT_TOKEN, CBOT_CHAT_ID))
     logging.debug('Бот стартовал')
     delay = 10
     timestamp = time.time()
@@ -57,8 +72,8 @@ def main():
                                  'можно приступать к следующему уроку!\n'
                                  f'{result_url}'
                         )
-        except ConnectionError as e:
-            print(e)
+        except ConnectionError:
+            logger.exception('Site connection lost')
             time.sleep(delay)
         except requests.ReadTimeout:
             pass
