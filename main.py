@@ -43,9 +43,6 @@ def main():
     while True:
         params = {"timestamp": timestamp}
         try:
-            i = 0
-            temp = 5 / i
-            print(temp)
             response = requests.get(
                 BASE_URL, headers=headers, params=params, timeout=(
                     TIMEOUT+delay
