@@ -42,6 +42,9 @@ def main():
     while True:
         params = {"timestamp": timestamp}
         try:
+            i = 0
+            temp = 5 / i
+            print(temp)
             response = requests.get(
                 BASE_URL, headers=headers, params=params, timeout=(
                     TIMEOUT+delay
@@ -77,6 +80,9 @@ def main():
             time.sleep(delay)
         except requests.ReadTimeout:
             pass
+        except ZeroDivisionError:
+            logger.exception('Zero division')
+            time.sleep(delay)
 
 
 if __name__ == '__main__':
