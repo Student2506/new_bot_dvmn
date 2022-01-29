@@ -28,7 +28,14 @@ class TelegramLogsHandler(logging.Handler):
 
 
 def main():
-    bot = telegram.Bot(token=CBOT_BOT_TOKEN)
+    logging_bot = telegram.Bot(token=CBOT_BOT_TOKEN)
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
+    )
+    logger.setLevel(logging.WARNING)
+    logger.addHandler(TelegramLogsHandler(logging_bot, CBOT_CHAT_ID))
+    main_bot = telegram.Bot(token=CBOT_BOT_TOKEN)
     logging.debug('Бот стартовал')
     delay = 10
     timestamp = time.time()
@@ -53,14 +60,14 @@ def main():
                     result_title = result.get('lesson_title')
                     result_url = result.get('lesson_url')
                     if result.get('is_negative'):
-                        bot.send_message(
+                        main_bot.send_message(
                             chat_id=CBOT_CHAT_ID,
                             text=f'У Вас проверили работу "{result_title}"\n\n'
                                  'К сожалению в работе нашлись ошибки.\n'
                                  f'{result_url}'
                         )
                     else:
-                        bot.send_message(
+                        main_bot.send_message(
                             chat_id=CBOT_CHAT_ID,
                             text=f'У Вас проверили работу "{result_title}"\n\n'
                                  'Преподавателю все понравилось, '
@@ -75,11 +82,4 @@ def main():
 
 
 if __name__ == '__main__':
-    logging_bot = telegram.Bot(token=CBOT_BOT_TOKEN)
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
-    )
-    logger.setLevel(logging.WARNING)
-    logger.addHandler(TelegramLogsHandler(logging_bot, CBOT_CHAT_ID))
     main()
