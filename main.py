@@ -4,6 +4,9 @@ import time
 
 import requests
 import telegram
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_URL = 'https://dvmn.org/api/long_polling/'
 CBOT_DVMN_KEY = os.environ['DVMN_KEY']
@@ -49,12 +52,15 @@ def main():
                     TIMEOUT+delay
                 )
             )
+            logging.debug(response.text)
             response.raise_for_status()
             homeworks = response.json()
-            if 'timeout' in homeworks:
+            if 'timeout' in response.text:
                 timestamp = homeworks.get('timestamp_to_request')
-            if 'found' in homeworks:
+            if 'found' in response.text:
                 timestamp = homeworks.get('last_attempt_timestamp')
+                logging.debug(homeworks)
+
                 results = homeworks.get('new_attempts', [])
                 for result in results:
                     result_title = result.get('lesson_title')
