@@ -4,9 +4,9 @@ import time
 
 import requests
 import telegram
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 BASE_URL = 'https://dvmn.org/api/long_polling/'
 CBOT_DVMN_KEY = os.environ['DVMN_KEY']
